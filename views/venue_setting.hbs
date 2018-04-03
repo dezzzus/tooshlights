@@ -1,0 +1,426 @@
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{venue.name}}</title>
+
+    <!-- Bootstrap -->
+    <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+
+    <!-- bootstrap slider -->
+    <link href="/css/bootstrapslider/bootstrap-slider.css" rel="stylesheet">
+
+    <!-- iCheck -->
+    <link href="/vendors/iCheck/skins/flat/pink.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/build/css/custom.css" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container setting-page">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;" text-align: center;>
+              <a href="/" class="site_title"><img src="/images/logo-top-left.png" width="180px"/></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        {{> headers}}
+
+        <!-- page content -->
+        <div class="hidden-div">
+            <input type="hidden" id="venue_id" value="{{venue.venue_id}}">
+            <input type="hidden" id="venue_notify_option" value="{{notify_option}}">
+        </div>
+        <div class="right_col" role="main">
+            <div class="" style="margin-left: 50px;">
+                <div class="page-title">
+                  <div class="title_left">
+                    <h3 style="color:#71706e; font-size: 28px; margin-top: 30px;">Venue Settings</h3>
+                  </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="x_panel grey_back">
+                      <div class="x_content">
+                        <div class="control_row" style="padding-left: 60px;">
+                            <span style="font-size: 30px; font-weight: 300; width: 250px; display: inline-block; color:#71706e;"> Brightness </span>
+                            <span style="width: calc(100% - 450px); display: inline-block; vertical-align: text-bottom;">
+                                <input id="brightness" data-slider-id='brightnessSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                            </span>
+                            <span id="brightness_val" style="width:100px;text-align: center; color:grey; display: inline-block; font-size: 25px;">
+                            1%
+                            </span>
+                        </div>
+                        <div class="control_row" style="padding-left: 60px;">
+                            <div style="font-size: 30px; font-weight: 300; width: 250px; display: inline-block; vertical-align: top; color:#71706e; margin-top: 35px;">
+                                LED Colors
+                            </div>
+                            <div style="width: calc(100% - 260px); display: inline-block;">
+                                <span style="font-size: 25px; width:33.33%; color:#c2c2c2">
+                                    <svg height="55" width="52" style="">
+                                        <rect x="0" cy="0" width="50" height="50" rx="20" ry="20" stroke="black" stroke-width="0" fill="#2cf80c" id="vacant_col" />
+                                    </svg>
+                                    <span style="vertical-align: top; line-height: 55px;">available</span>
+                                </span><span style="font-size: 25px; width:33.33%; color:#c2c2c2">
+                                    <svg height="55" width="52" style="">
+                                        <rect x="0" cy="0" width="50" height="50" rx="20" ry="20" stroke="black" stroke-width="0" fill="red" id="occupied_col" />
+                                    </svg>
+                                    <span style="vertical-align: top; line-height: 55px;">occupied</span>
+                                </span><span style="font-size: 18px; width:33.33%; color:#c2c2c2">
+                                    <svg height="55" width="52" style="">
+                                        <rect x="0" cy="0" width="50" height="50" rx="20" ry="20" stroke="black" stroke-width="0" fill="blue" id="vacant_handicap" />
+                                    </svg>
+                                    <span style="vertical-align: top; line-height: 25px;">available<br/>(handicap accessible)</span>
+                                </span>
+                                <div style="text-align: center;">
+                                    <span style="background-color: #ababab; padding: 3px 20px; border-radius: 20px; font-size: 20px; color: #fff; cursor: pointer;">
+                                        reset colors
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control_row" style="position:relative; height: 180px; padding-left: 60px; padding-top: 27px;" id="battery_low_row">
+                            <span style="font-size: 30px; font-weight: 300; width: 250px; position: absolute; top: 30px; left: 30px; color:#484848;">
+                                <input type="checkbox" checked="checked" id="low_battery_enabled" class="big"> <label for="low_battery_enabled">Low Battery</label>
+                            </span>
+                            <div style="margin-left: 60%; margin-top: 15px; height: 30px;">
+                                <span style="width: 100%; display: inline-block; vertical-align: text-bottom;">
+                                    <input id="battery_low_threshold" data-slider-id='battery_low_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                            </div>
+                            <div style="color:#9a9a9a;">
+                                <div style="font-size: 25px;margin-left: 28px;">
+                                    Notify me when battery reaches <span id="battery_low_threshold_val">0%</span>
+                                </div>
+                                <div style="text-align:center; font-size: 25px;">
+                                    <span>
+                                        <input type="checkbox" class="viaDashboard" id="viadashboard1" checked="checked">
+                                        <label for="viadashboard1">
+                                            <span style="vertical-align: middle; margin-right: 20px;">via dashboard</span>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="checkbox" class="viaEmail" id="viaemail1" checked="checked">
+                                        <label for="viaemail1">
+                                            via email
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="" style="margin-top: 100px; margin-left: 50px;">
+                <div class="page-title">
+                  <div class="title_left" style=" color:#484848;">
+                    <h3 style="font-size: 28px;">Notification Settings</h3>
+                  </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row" style="position:relative">
+                  <div id="womentab" class="active-tab menutab" style="right: calc(5% + 405px);">
+                    <img src="/images/settings/women-active.png">
+                  </div>
+                  <div id="mentab" class="inactive-tab menutab" style="right: calc(5% + 270px);">
+                    <img src="/images/settings/men-inactive.png">
+                  </div>
+                  <div id="unisextab" class="inactive-tab menutab" style="right: calc(5% + 135px);">
+                    <img src="/images/settings/unisex-inactive.png">
+                  </div>
+                  <div class="col-md-12">
+                    <div class="x_panel grey_back">
+                      <div class="x_content">
+                        <div class="control_row womentab-view" style="position:relative; padding-left:60px;">
+                            <span style="font-size: 30px; font-weight: 300; position: absolute; top: 0px; left: 60px; color:#484848;">
+                                <input type="checkbox" class="flat-setting main_enablecheck" checked="checked"> Maintenance Threshold
+                            </span>
+                            <div style="margin-left: 69%; margin-top: 15px; height: 30px;">
+                                <span style="width: 100%; display: inline-block; vertical-align: text-bottom;">
+                                    <input id="stall_turnover_threshold" data-slider-id='stall_turnover_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                            </div>
+                            <div style="color:#9a9a9a;">
+                                <div style="font-size: 25px; display: inline-block; width: 69%;">
+                                    Notify me when <span id="stall_turnover_threshold_val">0%</span> of the stalls in a restroom
+                                    <br/> turn over <span id="stall_times_threshold_val">0</span> times
+                                </div>
+                                <span style="width: 30%; display: inline-block; vertical-align: middle; height: 70px;">
+                                    <input id="stall_times_threshold" data-slider-id='stall_times_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                                <div style="text-align:center; font-size: 25px;">
+                                    <span>
+                                        <input type="checkbox" class="mainviaDashboard" id="mainviadashboard1" checked="checked">
+                                        <label for="mainviadashboard1">
+                                            <span style="vertical-align: middle; margin-right: 20px;">via dashboard</span>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="checkbox" class="mainviaEmail" id="mainviaemail1" checked="checked">
+                                        <label for="mainviaemail1">
+                                            via email
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control_row womentab-view" style="position:relative; padding-left:60px;">
+                            <span style="font-size: 30px; font-weight: 300; position: absolute; top: 0px; left: 60px; color:#484848;">
+                                <input type="checkbox" class="flat-setting acute_enablecheck" checked="checked"> Acute Maintenance Issue
+                            </span>
+                            <div style="margin-left: 69%; margin-top: 15px; height: 30px;">
+                                <span style="width: 100%; display: inline-block; vertical-align: text-bottom;">
+                                    <input id="acute_maintenancethreshold" data-slider-id='acute_maintenance_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                            </div>
+                            <div style="color:#9a9a9a;">
+                                <div style="font-size: 25px; display: inline-block; width: 69%;">
+                                    Notify me if a stall in a busy restroom doesn't turn over for <span id="acute_maintenance_threshold_val">0</span> minutes.
+                                </div>
+                                <div style="text-align:center; font-size: 25px;">
+                                    <span>
+                                        <input type="checkbox" class="viaDashboard" id="viadashboard2" checked="checked">
+                                        <label for="viadashboard2">
+                                            <span style="vertical-align: middle; margin-right: 20px;">via dashboard</span>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="checkbox" class="viaEmail" id="viaemail2" checked="checked">
+                                        <label for="viaemail2">
+                                            via email
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control_row mentab-view hidden-div" style="position:relative; padding-left:60px;">
+                            <span style="font-size: 30px; font-weight: 300; position: absolute; top: 0px; left: 60px; color:#484848;">
+                                <input type="checkbox" class="flat-setting main_enablecheck" checked="checked"> Maintenance Threshold
+                            </span>
+                            <div style="margin-left: 69%; margin-top: 15px; height: 30px;">
+                                <span style="width: 100%; display: inline-block; vertical-align: text-bottom;">
+                                    <input id="stall_turnover_threshold" data-slider-id='stall_turnover_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                            </div>
+                            <div style="color:#9a9a9a;">
+                                <div style="font-size: 25px; display: inline-block; width: 69%;">
+                                    Notify me when <span id="stall_turnover_threshold_val">0%</span> of the stalls in a restroom
+                                    <br/> turn over <span id="stall_times_threshold_val">0</span> times
+                                </div>
+                                <span style="width: 30%; display: inline-block; vertical-align: middle; height: 70px;">
+                                    <input id="stall_times_threshold" data-slider-id='stall_times_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                                <div style="text-align:center; font-size: 25px;">
+                                    <span>
+                                        <input type="checkbox" class="mainviaDashboard" id="mainviadashboard2" checked="checked">
+                                        <label for="mainviadashboard2">
+                                            <span style="vertical-align: middle; margin-right: 20px;">via dashboard</span>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="checkbox" class="mainviaEmail" id="mainviaemail2" checked="checked">
+                                        <label for="mainviaemail2">
+                                            via email
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control_row mentab-view hidden-div" style="position:relative; padding-left:60px;">
+                            <span style="font-size: 30px; font-weight: 300; position: absolute; top: 0px; left: 60px; color:#484848;">
+                                <input type="checkbox" class="flat-setting acute_enablecheck" checked="checked"> Acute Maintenance Issue
+                            </span>
+                            <div style="margin-left: 69%; margin-top: 15px; height: 30px;">
+                                <span style="width: 100%; display: inline-block; vertical-align: text-bottom;">
+                                    <input id="acute_maintenancethreshold" data-slider-id='acute_maintenance_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                            </div>
+                            <div style="color:#9a9a9a;">
+                                <div style="font-size: 25px; display: inline-block; width: 69%;">
+                                    Notify me if a stall in a busy restroom doesn't turn over for <span id="acute_maintenance_threshold_val">0</span> minutes.
+                                </div>
+                                <div style="text-align:center; font-size: 25px;">
+                                    <span>
+                                        <input type="checkbox" class="viaDashboard" id="viadashboard3" checked="checked">
+                                        <label for="viadashboard3">
+                                            <span style="vertical-align: middle; margin-right: 20px;">via dashboard</span>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="checkbox" class="viaEmail" id="viaemail3" checked="checked">
+                                        <label for="viaemail3">
+                                            via email
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="control_row unisextab-view hidden-div" style="position:relative; padding-left:60px;">
+                            <span style="font-size: 30px; font-weight: 300; position: absolute; top: 0px; left: 60px; color:#484848;">
+                                <input type="checkbox" class="flat-setting main_enablecheck" checked="checked"> Maintenance Threshold
+                            </span>
+                            <div style="margin-left: 69%; margin-top: 15px; height: 30px;">
+                                <span style="width: 100%; display: inline-block; vertical-align: text-bottom;">
+                                    <input id="stall_turnover_threshold" data-slider-id='stall_turnover_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                            </div>
+                            <div style="color:#9a9a9a;">
+                                <div style="font-size: 25px; display: inline-block; width: 69%;">
+                                    Notify me when <span id="stall_turnover_threshold_val">0%</span> of the stalls in a restroom
+                                    <br/> turn over <span id="stall_times_threshold_val">0</span> times
+                                </div>
+                                <span style="width: 30%; display: inline-block; vertical-align: middle; height: 70px;">
+                                    <input id="stall_times_threshold" data-slider-id='stall_times_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                                <div style="text-align:center; font-size: 25px;">
+                                    <span>
+                                        <input type="checkbox" class="mainviaDashboard" id="mainviadashboard3" checked="checked">
+                                        <label for="mainviadashboard3">
+                                            <span style="vertical-align: middle; margin-right: 20px;">via dashboard</span>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="checkbox" class="mainviaEmail" id="mainviaemail3" checked="checked">
+                                        <label for="mainviaemail3">
+                                            via email
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control_row unisextab-view hidden-div" style="position:relative; padding-left:60px;">
+                            <span style="font-size: 30px; font-weight: 300; position: absolute; top: 0px; left: 60px; color:#484848;">
+                                <input type="checkbox" class="flat-setting acute_enablecheck" checked="checked"> Acute Maintenance Issue
+                            </span>
+                            <div style="margin-left: 69%; margin-top: 15px; height: 30px;">
+                                <span style="width: 100%; display: inline-block; vertical-align: text-bottom;">
+                                    <input id="acute_maintenancethreshold" data-slider-id='acute_maintenance_thresholdSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="1"/>
+                                </span>
+                            </div>
+                            <div style="color:#9a9a9a;">
+                                <div style="font-size: 25px; display: inline-block; width: 69%;">
+                                    Notify me if a stall in a busy restroom doesn't turn over for <span id="acute_maintenance_threshold_val">0</span> minutes.
+                                </div>
+                                <div style="text-align:center; font-size: 25px;">
+                                    <span>
+                                        <input type="checkbox" class="viaDashboard" id="viadashboard4" checked="checked">
+                                        <label for="viadashboard4">
+                                            <span style="vertical-align: middle; margin-right: 20px;">via dashboard</span>
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="checkbox" class="viaEmail" id="viaemail4" checked="checked">
+                                        <label for="viaemail4">
+                                            via email
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="text-align:center">
+                    <button type="button" class="btn btn-info" id="save-setting">Save Settings</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Copyright 2018 Modus Systems, LLC.
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="/vendors/nprogress/nprogress.js"></script>
+    <!-- bootstrap slider -->
+    <script src="/js/bootstrapslider/bootstrap-slider.min.js"></script>
+    <!-- iCheck -->
+    <script src="/vendors/iCheck/icheck.min.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="/js/socket.io.min.js"></script>
+    <script src="/js/animateNumber.min.js"></script>
+
+    <script src="/build/js/venue_setting.js"></script>
+  </body>
+</html>

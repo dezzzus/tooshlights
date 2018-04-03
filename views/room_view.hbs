@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Dashboard - Modus Systems</title>
+
+    <!-- Bootstrap -->
+    <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/build/css/custom.css" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0; text-align: center;">
+              <a href="/" class="site_title"><img src="/images/logo-top-left.png" width="180px"/></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li class="active"><a href="/dashboard/admin"><i class="fa fa-sitemap"></i> {{room.description}}<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu" style="display: block;">
+                      {{#each floors as |floor|}}
+                        <li class="active"><a href="/floor/{{floor.floor_id}}">{{floor.name}}<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: block;">
+                            {{#each floor.rooms as |room|}}
+                              <li><a href="/room/{{room.room_id}}/">{{room.name}}</a></li>
+                            {{/each}}
+                          </ul>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a href="/{{campusid}}/{{venueid}}/setting" data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="/logout">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        {{> headers}}
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->
+          <div class="row tile_count">
+            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Available Stalls</span>
+              <div class="count" style="font-size:40px;">
+              <span style="color:rgb(131,253,64); font-size:40px;font-weight: bolder;" id="available_stalls">{{room.available_stalls}}</span>
+              <span class="small_content" id="room_stalls_stat">
+              of {{stalls.length}} (<span id="available_percent">{{room.available_percent}}</span>%)
+              </span>
+              </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-clock-o"></i> Occupied Stalls</span>
+                <div class="count" style="font-size:40px;">
+                    <span style="font-size:40px;font-weight: bolder;" id="occupied_stalls" class="red">{{room.occupied_stalls}}</span>
+                    <span class="small_content" id="room_stalls_stat">
+                  of {{stalls.length}} (<span id="occupied_percent">{{room.occupied_percent}}</span>%)
+                </span>
+                </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count red">
+              <span class="count_top" style="color:rgb(231, 89, 88);">Needs Attention</span>
+              <div class="needs_attention_icon">
+                <div class="count" id="needs_attention">3</div>
+                <img src="/images/maintanence.png" width="40px"></img>
+                <img src="/images/battery.png" width="40px"></img>
+              </div>
+              <span class="count_bottom"></span>
+            </div>
+
+          </div>
+          <!-- /top tiles -->
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="dashboard_graph">
+
+                <div class="row x_title">
+                  <div class="col-md-6">
+                    <h3 id="room_name">{{room.name}}</h3>
+                  </div>
+                  <div class="col-md-6">
+                    <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-9 col-sm-9 col-xs-12" style="text-align: center;width: 100%;">
+                    <div class="show_devinfo" style="height:180px;">
+                        <div style="font-size: 32px;">Stall <span id="show_stallno"></span></div>
+                        <div>&#x25CF; used <span id="show_used_today"></span> today</div>
+                        <div>&#x25CF; used <span id="show_used_week"></span> this week</div>
+                        <div style="font-size: 20px; line-height:30px">status:&nbsp;&nbsp;
+                            <svg height="25" width="22" style="vertical-align: sub;">
+                                <circle cx="12" cy="15" r="10" stroke="black" stroke-width="1" fill="red" id="show_dev_status" />
+                            </svg> <span id="dev_status_text">available</span></div>
+                        <div style="font-size: 20px; line-height:30px">battery:
+                          <span class="battery-icon-popup bi-100"></span>
+                          <span class="battery-status">100%</span>
+                        </div>
+                        <!--<div class="popup_btn_row">
+                           <img id="flash_button" src="/images/pop-over-button1.png" width="60px"></img>
+                           <img src="/images/pop-over-button2.png" width="60px"></img>
+                           <a href="https://www.youtube.com/watch?v=ok1AcpoooCw" target="_blank"><img src="/images/pop-over-button2.png" width="60px"></img></a>
+                        </div>-->
+                    </div>
+                    <div class="stadium_device_list" style="background-image: url({{room.map_file}}); width:{{room.map_width}}px; height:{{room.map_height}}px">
+                        {{#each stalls}}
+                            <div class="device" id="{{name}}" data-id="{{sensor_id}}" style="left: {{left}}; top: {{top}}">
+                                <div class="dev_status"
+                                {{#if isActive}}
+
+                                  {{#if handicap}}
+                                     style="color: #c1c8d0;border-color: rgb(0,132,252); box-shadow: 1px 1px 5px 3px #bbbcbc;"
+                                  {{else}}
+                                    style="color: #c1c8d0;border-color: #78ff3b; box-shadow: 1px 1px 5px 3px #bbbcbc;"
+                                  {{/if}}
+
+                                {{else}}
+
+                                   style="color: #c1c8d0;border-color: rgb(239,129,129); box-shadow: 1px 1px 5px 3px #bbbcbc;"
+
+                                {{/if}}
+                                >
+                                    {{id}}
+                                </div>
+
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+          </div>
+          <br />
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="x_panel tile fixed_height_390">
+                <div class="x_title">
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="demo-placeholder">
+                      <canvas id="chart_plot_01" data-room-id="{{room.room_id}}"></canvas>
+                    </div>
+                    <div class="graph_title">
+                    <span>
+                        <i class="fa fa-square" style="color:rgb(197, 249, 164)"></i>
+                        Activity Today
+                    </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Table View</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content" style="text-align: center">
+                    <div class="x_table_container">
+                        <table id="datatable" class="table table-striped table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Stall #</th>
+                              <th>Day</th>
+                              <th>Week</th>
+                              <th>Month</th>
+                              <th>Avg. Time Occupied</th>
+                              <th>Avg. Time Available</th>
+                              <th>Battery</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            
+                            {{#each stallsData}}
+                              <tr data-target="{{@key}}">
+                                <td>{{index}}</td>
+                                <td data-target="used_today">{{ today }}</td>
+                                <td data-target="used_week">{{week}}</td>
+                                <td data-target="used_month">{{month}}</td>
+                                <td data-target="avg_busy_time">{{avgAvailable}}</td>
+                                <td data-target="avg_vacant_time">{{avgOccupied}}</td>
+                                <td data-target="battery"><span class="battery-icon-table {{batteryClass}}"></span> {{battery}}%</td>
+                              </tr>
+                            {{/each}}  
+                          </tbody>
+                        </table>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Copyright 2018 Modus Systems, LLC.
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="/vendors/nprogress/nprogress.js"></script>
+
+    <!-- gauge.js -->
+    <script src="/vendors/gauge.js/dist/gauge.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="/vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="/vendors/skycons/skycons.js"></script>
+
+    <!-- Flot -->
+    <script src="/vendors/Flot/jquery.flot.js"></script>
+    <script src="/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/vendors/moment/min/moment.min.js"></script>
+    <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- Chart.js -->
+    <script src="/vendors/Chart.js/dist/Chart.min.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="/js/socket.io.min.js"></script>
+    <script src="/js/animateNumber.min.js"></script>
+    <script src="/build/js/room_plot.js"></script>
+    <script src="/build/js/custom.js"></script>
+    <script>
+        var room_id = '{{room.room_id}}'; 
+        var dev_infos =[];
+        var selected_dev = {};
+        var stallsCount = '{{stalls.length}}';
+
+        var hidePopup;
+
+        {{#each stallsData}}
+        dev_infos['{{name}}'] = {id:{{index}}, dayuses: {{today}}, weekuses: {{week}}, status: '{{status}}', battery: '{{battery}}', sensor_id: '{{@key}}' };
+        {{/each}}
+        /*$(document).mousemove( function(e) {
+            if ($('.show_devinfo').is(":visible")) {
+                 var parentOffset = $(e.target).parent().offset()
+                 var relX = e.pageX - parentOffset.left + 10;
+                 var relY = e.pageY - parentOffset.top + 10;
+                 $('.show_devinfo').css({'top':relY,'left':relX});
+            }
+        });*/
+        $('.device').click(function(e){
+            selected_dev = dev_infos[$(e.target).parent(".device").attr('id')];
+            if (!selected_dev) {
+                selected_dev = dev_infos[$(e.target).attr('id')];
+            }
+            //console.log(selected_dev);
+            if (!selected_dev)
+                selected_dev = {};
+            if (selected_dev) {
+                $('#show_stallno').html(selected_dev.id);
+                $('#show_used_today').html(selected_dev.dayuses+' times');
+                $('#show_used_week').html(selected_dev.weekuses+' times');
+                if (selected_dev.status == 'vacant') {
+                    $('#show_dev_status').attr("fill", "#78ff3b");
+                    $('#dev_status_text').html("available");
+                } else {
+                    $('#show_dev_status').attr("fill", "red");
+                    $('#dev_status_text').html("occupied");
+                }
+                let batteryClass = 'bi-0';
+                let battery = selected_dev.battery | void 0;
+                if (battery === 0) {
+                  batteryClass = 'bi-0';
+                } else if(battery <= 25) {
+                  batteryClass = 'bi-25';
+                } else if(battery <= 50) {
+                  batteryClass = 'bi-50';
+                } else if(battery <= 75) {
+                  batteryClass = 'bi-75';
+                } else if(battery === 100) {
+                  batteryClass = 'bi-100';
+                }
+                $('.battery-icon-popup').removeClass('bi-0 bi-25 bi-50 bi-75 bi-100').addClass(batteryClass);
+//                        $('#show_dev_battery').attr("fill", "rgb(129,239,144)");
+//                        $('#show_dev_battery').attr("fill", "red");
+                $('.battery-status').html(selected_dev.battery + '%');
+            }
+            var parentOffset = $(this).parent(".stadium_device_list").parent().offset();
+            var relX = e.pageX - parentOffset.left;
+            var relY = e.pageY - parentOffset.top;
+            $('.show_devinfo').css({'top':relY,'left':relX});
+            $('.show_devinfo').toggle();
+        });
+
+        $('.device').on('mouseleave', function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          hidePopup = setTimeout(() => {
+            $('.show_devinfo').hide();
+          }, 100);
+        });
+
+        $('.device').on('mouseenter', function(event) {
+          clearTimeout(hidePopup);
+        });
+
+        $('.show_devinfo').on('mouseleave', function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          hidePopup = setTimeout(() => {
+            $('.show_devinfo').hide();
+          }, 100);
+        });
+
+        $('.show_devinfo').on('mouseenter', function(event) {
+          clearTimeout(hidePopup);
+        });
+
+        /*
+        $('.device').mouseout(function(evt){
+            $('.show_devinfo').css({display:'none'});
+        });*/
+        var socket = io.connect(window.location.origin); // connect to server
+        var socket2 = io.connect(window.location.protocol+'//'+window.location.hostname+':5001'); // connect to server
+        $('#flash_button').click(function(evt){
+            socket2.emit('flash');
+        });
+        socket2.on('flash', function() {
+            console.log ('flash event received!');
+        });
+        socket.on('stall_updated', function (stall_ent) { // listen to connection acknowledgement
+            console.log (stall_ent);
+            var stall_div = $('[data-id=' + stall_ent.sensor_id + ']');
+            console.log (stall_div);
+            if (stall_div){
+                if (stall_ent.status == 'vacant') {
+                  if (stall_ent.handicap && stall_ent.handicap === 1) {
+                    stall_div.children(".dev_status").css("border-color", "rgb(0,132,252)");
+                  } else {
+                    stall_div.children(".dev_status").css("border-color", "rgb(120,255,60)");
+                  }
+
+                } else {
+                    stall_div.children(".dev_status").css("border-color", "rgb(239,129,129)");
+                }
+                dev_infos[stall_ent.name] = {id:stall_ent.id, dayuses: stall_ent.used_today, weekuses: stall_ent.used_week,
+                    status: stall_ent.status, battery: stall_ent.battery, sensor_id: stall_ent.sensor_id};
+                console.log (selected_dev);
+                if (selected_dev.sensor_id == stall_ent.sensor_id) {
+                    selected_dev = dev_infos[stall_ent.name];
+                    $('#show_stallno').html(selected_dev.id);
+                    $('#show_used_today').html(selected_dev.dayuses+'times');
+                    $('#show_used_week').html(selected_dev.weekuses+'times');
+                    if (selected_dev.status == 'vacant') {
+                        $('#show_dev_status').attr("fill", "rgb(129,239,144)");
+                    } else {
+                        $('#show_dev_status').attr("fill", "red");
+                    }
+                    let batteryClass = 'bi-0';
+                    let battery = selected_dev.battery | void 0;
+                    if (battery === 0) {
+                      batteryClass = 'bi-0';
+                    } else if(battery <= 25) {
+                      batteryClass = 'bi-25';
+                    } else if(battery <= 50) {
+                      batteryClass = 'bi-50';
+                    } else if(battery <= 75) {
+                      batteryClass = 'bi-75';
+                    } else if(battery === 100) {
+                      batteryClass = 'bi-100';
+                    }
+                    $('.battery-icon-popup').removeClass('bi-0 bi-25 bi-50 bi-75 bi-100').addClass(batteryClass);
+//                        $('#show_dev_battery').attr("fill", "rgb(129,239,144)");
+//                        $('#show_dev_battery').attr("fill", "red");
+                    $('.battery-status').html(selected_dev.battery + '%');
+                }
+            }
+
+            var availableStallsCount = 0;
+            var items = $('.stadium_device_list .dev_status');
+            console.log(items)
+            for (var x = 0; x < items.length; x++) {
+                console.log($(items[x]).css("border-color"));
+                if ($(items[x]).css("border-color") !== 'rgb(239, 129, 129)') {
+                    availableStallsCount++;
+                }
+            }
+
+            //Refresh available stalls
+            $('#available_stalls').html(availableStallsCount);
+            $('#available_percent').html((availableStallsCount / stallsCount).toFixed(1) * 100);
+            var occupiedStallsCount = stallsCount - availableStallsCount;
+            $('#occupied_stalls').html(occupiedStallsCount);
+            $('#occupied_percent').html((occupiedStallsCount / stallsCount).toFixed(1) * 100);
+
+            var row = $("#datatable tr[data-target="+stall_ent.sensor_id+"]");
+            $(row).find("td").each(function(){
+              var target =$(this).attr("data-target");
+              var batteryClass = 'battery-icon-table';
+
+              if (target === 'used_today') {
+                  $(this).html(parseInt($(this).html()) + 1);
+              }
+
+                if (target === 'used_week') {
+                    $(this).html(parseInt($(this).html()) + 1);
+                }
+
+                if (target === 'used_month') {
+                    $(this).html(parseInt($(this).html()) + 1);
+                }
+
+              if (stall_ent[target]) {
+                if (target === 'battery') {
+                  if (stall_ent[target] === 0) {
+                    batteryClass += ' bi-0';
+                  } else if(stall_ent[target] <= 25) {
+                    batteryClass += ' bi-25';
+                  } else if(stall_ent[target] <= 50) {
+                    batteryClass += ' bi-50';
+                  } else if(stall_ent[target] <= 75) {
+                    batteryClass += ' bi-75';
+                  } else if(stall_ent[target] === 100){
+                    batteryClass += ' bi-100';
+                  } else {
+                    batteryClass += ' bi-0';
+                  }
+                  let text = `<span class="${batteryClass}"></span> ${stall_ent[target]}\%`;
+                  $(this).html(text);
+                } else {
+                  $(this).text(stall_ent[target]);
+                }
+
+              }
+            });
+            //location.reload();
+            socket.emit('accepted_stall_event', stall_ent); // accept received event from the server
+        });
+        socket.on('room_updated', function (room_ent) { // listen to connection acknowledgement
+            console.log (room_ent);
+            if (room_id == room_ent.room_id) {
+                $('#room_name').html(room_ent.name);
+                $('#available_stalls').html(room_ent.available_stalls);
+                $('#room_stalls_stat').html('of '+room_ent.total_stalls+' (<span id="available_percent">'+room_ent.available_percent.toFixed(1)+'</span>%)');
+                $('#available_fromlastweek').html(room_ent.available_fromlastweek);
+                $('#avg_vacant_time').html(room_ent.avg_vacant_time);
+                $('#vacant_time_percent').html(room_ent.vacant_time_percent.toFixed(1));
+                $('#needs_attention').html(room_ent.needs_attention);
+                $('#available_percent').animateNumber({ number: room_ent.available_percent.toFixed(1) });
+                $('#avg_vacant_time').animateNumber({ number: room_ent.avg_vacant_time });
+                $('#needs_attention').animateNumber({ number: room_ent.needs_attention });
+                set_usage_meter ((100-room_ent.available_percent)*100);
+            }
+            socket.emit('accepted_room_event', room_ent); // accept received event from the server
+        });
+        socket.on('floor_updated', function (floor_ent) { // listen to connection acknowledgement
+            console.log (floor_ent);
+            //location.reload();
+            socket.emit('accepted_floor_event', floor_ent); // accept received event from the server
+        });
+        socket.on('battery_updated', function (stall_entity) { // listen to connection acknowledgement
+            console.log ('battery_updated', stall_entity);
+            var itemstring=`
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>sensor name:`+stall_entity.name+`</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          battery status `+stall_entity.battery+`
+                        </span>
+                      </a>
+                    </li>
+            `;
+            $("#menu1").prepend(itemstring);
+            socket.emit('accepted_room_event', stall_entity); // accept received event from the server
+        });   
+        socket.on('restroom_notification', function (msg) { // listen to connection acknowledgement
+            console.log ('battery_updated', msg);
+            var itemstring=`
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>sensor name:`+msg+`</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Notification `+`
+                        </span>
+                      </a>
+                    </li>
+            `;
+            $("#menu1").prepend(itemstring);
+            socket.emit('accepted_room_event', stall_entity); // accept received event from the server
+        });          
+        $('#available_percent').animateNumber({ number: {{room.available_percent}} });
+        $('#avg_vacant_time').animateNumber({ number: {{room.avg_vacant_time}} });
+        $('#needs_attention').animateNumber({ number: {{room.needs_attention}} });
+    </script>
+  </body>
+</html>
