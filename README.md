@@ -6,7 +6,7 @@ Tooshlights is a restroom traffic management system that lets guests "know where
 - node server.js
 
 # tech stacks
-##Node.js
-##Handlebars
-##Gentella template dashboard
-##Socket.IO
+- Node.js
+- Handlebars
+- Gentella template dashboard
+- Socket.IO
